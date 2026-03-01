@@ -1,0 +1,139 @@
+.bg-grid{
+  position:fixed; inset:0;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 76px 76px;
+  opacity:0.06;
+  pointer-events:none;
+  mask-image: radial-gradient(55% 45% at 50% 35%, black 42%, transparent 80%);
+  animation: gridMove 22s linear infinite;
+}
+@keyframes gridMove{
+  0%{background-position:0 0, 0 0}
+  100%{background-position:380px 0, 0 380px}
+}
+
+.cursor-glow{
+  position:fixed; width:520px; height:520px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center, rgba(106,92,255,0.18), transparent 55%),
+    radial-gradient(circle at 45% 55%, rgba(32,227,178,0.13), transparent 58%),
+    radial-gradient(circle at 55% 45%, rgba(255,43,214,0.10), transparent 62%);
+  filter: blur(18px);
+  transform: translate(-50%,-50%);
+  pointer-events:none;
+  opacity:0.85;
+  mix-blend-mode: screen;
+  z-index:1;
+}
+
+.topbar{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(14px);
+  background: rgba(6,7,12,0.55);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 0;
+  gap:12px;
+}
+
+.brand{
+  display:flex; align-items:center; gap:12px;
+  font-family: Orbitron, Inter, sans-serif;
+  letter-spacing:0.8px;
+  font-weight:700;
+}
+.logo{
+  width:36px; height:36px; border-radius:12px;
+  background: linear-gradient(135deg, rgba(106,92,255,0.9), rgba(32,227,178,0.8));
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 10px 26px rgba(106,92,255,0.22);
+}
+
+.navlinks{
+  display:flex; gap:16px; align-items:center;
+  color: var(--muted);
+  font-weight:700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+@media (max-width: 980px){ .navlinks{display:none} }
+
+.btn{
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight:800;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  cursor:pointer;
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.35);
+}
+.btn:hover{transform: translateY(-1px); background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.22)}
+.btn.primary{
+  border-color: rgba(106,92,255,0.55);
+  background: linear-gradient(135deg, rgba(106,92,255,0.44), rgba(32,227,178,0.12));
+}
+
+.panel, .card, .canvasWrap, .kpi{
+  border: 1px solid var(--hair);
+  background: linear-gradient(180deg, var(--panelA), var(--panelB));
+  border-radius: 26px;
+  box-shadow: var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.panel::after{
+  content:"";
+  position:absolute; left:14px; right:14px; top:10px; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  opacity:.55;
+  pointer-events:none;
+}
+
+.canvasWrap{
+  border-radius: 18px;
+  background: rgba(3,5,10,0.55);
+  box-shadow: var(--shadow2);
+  padding: 14px;
+}
+
+.tabbar{display:flex; gap:8px; flex-wrap:wrap; margin: 8px 0 12px;}
+.tab{
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.82);
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 900;
+  cursor:pointer;
+}
+.tab.active{
+  border-color: rgba(106,92,255,0.55);
+  background: linear-gradient(135deg, rgba(106,92,255,0.22), rgba(32,227,178,0.10));
+}
+
+.pill{
+  font-size: 12px;
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.86);
+}
+.pill.ok{border-color: rgba(32,227,178,0.35); background: rgba(32,227,178,0.08)}
+.pill.warn{border-color: rgba(255,204,102,0.35); background: rgba(255,204,102,0.08)}
+
+.reveal{opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease;}
+.reveal.on{opacity:1; transform: translateY(0);}

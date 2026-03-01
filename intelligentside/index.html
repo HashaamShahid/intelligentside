@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#04060b" />
+  <title>IntelligentSide | Plumbing Automation</title>
+  <meta name="description" content="Premium automation systems for plumbing businesses: instant lead response, follow-up, booking, CRM sync, and revenue dashboards." />
+
+  <link rel="icon" href="/assets/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/sections.css" />
+  <link rel="stylesheet" href="/css/premium-overrides.css" />
+
+  <!-- Chart.js CDN (no build required) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="cursor-glow" id="glow"></div>
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="#top" aria-label="IntelligentSide home">
+          <div class="logo" aria-hidden="true"></div>
+          <span>IntelligentSide</span>
+        </a>
+
+        <nav class="navlinks" aria-label="Primary">
+          <a href="#systems">systems</a>
+          <a href="#dashboard">dashboard</a>
+          <a href="#case-studies">case studies</a>
+          <a href="#roi">roi</a>
+          <a href="#contact">contact</a>
+        </nav>
+
+        <div class="cta">
+          <a class="btn" href="#dashboard">View Demo UI</a>
+          <a class="btn primary" href="#contact">Free Revenue Audit</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="hero">
+    <div class="wrap hero-grid">
+      <div class="reveal">
+        <div class="chiprow">
+          <div class="chip"><span class="dot"></span>Plumbing-focused automation</div>
+          <div class="chip"><span class="dot dot2"></span>Instant lead response</div>
+          <div class="chip"><span class="dot dot3"></span>Premium dashboards</div>
+        </div>
+
+        <h1>Stop losing plumbing jobs to missed calls.</h1>
+        <p class="sub">
+          Premium automation that replies instantly, follows up automatically, and books more jobs
+          without adding admin overhead.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#contact">Book Free Audit</a>
+          <button class="btn" id="openModal">Watch demo</button>
+        </div>
+
+        <div class="note">
+          Fast deployment. Clear metrics. Clean UI that feels like real software.
+        </div>
+      </div>
+
+      <aside class="panel reveal">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Revenue Command Center</h3>
+            <p>Interactive demo dashboard (sample data)</p>
+          </div>
+          <span class="pill ok">Live</span>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">response time</div>
+            <div class="value" id="kpiResponse">00:42</div>
+            <div class="delta"><span class="up">▲</span> 84% faster</div>
+          </div>
+          <div class="kpi">
+            <div class="label">bookings</div>
+            <div class="value" id="kpiBookings">+23%</div>
+            <div class="delta"><span class="up">▲</span> week over week</div>
+          </div>
+          <div class="kpi">
+            <div class="label">lost leads</div>
+            <div class="value" id="kpiLost">-31%</div>
+            <div class="delta"><span class="up">▲</span> recovered</div>
+          </div>
+        </div>
+
+        <div class="tabbar" role="tablist">
+          <button class="tab active" data-hero-tab="pipeline" type="button">pipeline</button>
+          <button class="tab" data-hero-tab="speed" type="button">speed</button>
+          <button class="tab" data-hero-tab="revenue" type="button">revenue</button>
+        </div>
+
+        <div class="canvasWrap">
+          <canvas id="heroChart"></canvas>
+        </div>
+
+        <div class="note" style="margin-top:10px">
+          Tabs simulate widgets a client sees after deployment.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section id="systems">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Systems built for plumbing reality</h2>
+        <p>Everything targets missed calls, slow callbacks, after-hours leads, and inconsistent follow-up.</p>
+      </div>
+
+      <div class="cards">
+        <div class="card reveal">
+          <h3>Instant Response Engine</h3>
+          <p>Missed-call auto text, lead capture, and after-hours routing.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Follow-Up Sequences</h3>
+          <p>Multi-step follow-up that turns quotes into booked jobs.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Booking + CRM Sync</h3>
+          <p>Calendar booking, pipeline stages, job value tracking, and dashboards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboard">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Premium dashboard experience</h2>
+        <p>Response speed, pipeline movement, booking rate, and recovered leads.</p>
+      </div>
+
+      <div class="panel reveal">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Client Dashboard (Demo)</h3>
+            <p>Toggle widgets to preview different views</p>
+          </div>
+          <div class="dashActions">
+            <span class="pill ok" id="badgeMode">Mode: Pipeline</span>
+            <button class="btn" id="shuffle" type="button">Shuffle Data</button>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <button class="tab active" data-dash-tab="pipeline" type="button">Pipeline</button>
+          <button class="tab" data-dash-tab="speed" type="button">Speed to Lead</button>
+          <button class="tab" data-dash-tab="revenue" type="button">Revenue Uplift</button>
+          <button class="tab" data-dash-tab="quality" type="button">Lead Quality</button>
+        </div>
+
+        <div class="flow">
+          <div class="canvasWrap"><canvas id="dashChartA"></canvas></div>
+          <div class="canvasWrap"><canvas id="dashChartB"></canvas></div>
+        </div>
+
+        <div class="note" style="margin-top:12px">
+          Visual style mirrors a high-end product, not a generic agency page.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="case-studies">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Case studies (modeled examples)</h2>
+        <p>Typical impact after response time drops and follow-up becomes consistent.</p>
+      </div>
+
+      <div class="panel reveal">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Case Study Dashboard Snapshot</h3>
+            <p>What a client sees after deployment</p>
+          </div>
+          <span class="pill ok">Snapshot</span>
+        </div>
+
+        <div class="flow">
+          <div class="canvasWrap"><canvas id="caseChartA"></canvas></div>
+          <div class="canvasWrap"><canvas id="caseChartB"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roi">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>ROI simulator</h2>
+        <p>Estimate uplift from faster response + consistent follow-up.</p>
+      </div>
+
+      <div class="roiGrid">
+        <div class="panel reveal">
+          <div class="miniheader">
+            <div class="title">
+              <h3>Inputs</h3>
+              <p>Adjust to match a plumbing business</p>
+            </div>
+            <span class="pill warn">Model</span>
+          </div>
+
+          <div class="inputsGrid">
+            <div class="field">
+              <label>Monthly leads</label>
+              <input id="leads" type="number" value="80" min="5" max="2000" />
+            </div>
+            <div class="field">
+              <label>Average job value</label>
+              <input id="jobValue" type="number" value="300" min="20" max="50000" />
+            </div>
+            <div class="field">
+              <label>Current booking rate (%)</label>
+              <input id="bookRate" type="number" value="40" min="1" max="100" />
+            </div>
+            <div class="field">
+              <label>Expected uplift (pp)</label>
+              <input id="uplift" type="number" value="15" min="0" max="60" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Speed improvement</label>
+            <input id="speed" type="range" value="80" min="0" max="100" />
+            <div class="note">Drag to simulate routing + faster replies</div>
+          </div>
+
+          <button class="btn primary" id="calcBtn" type="button">Recalculate</button>
+        </div>
+
+        <div class="panel reveal">
+          <div class="miniheader">
+            <div class="title">
+              <h3>Estimated impact</h3>
+              <p>Transparent math</p>
+            </div>
+            <span class="pill ok">Projected</span>
+          </div>
+
+          <div class="resultGrid">
+            <div class="kpi">
+              <div class="label">extra jobs / month</div>
+              <div class="value" id="extraJobs">+0</div>
+              <div class="delta">from uplift + speed gains</div>
+            </div>
+            <div class="kpi">
+              <div class="label">extra revenue / month</div>
+              <div class="value" id="extraRev">$0</div>
+              <div class="delta">based on job value</div>
+            </div>
+            <div class="kpi">
+              <div class="label">extra revenue / year</div>
+              <div class="value" id="extraYear">$0</div>
+              <div class="delta">compounding results</div>
+            </div>
+          </div>
+
+          <div class="canvasWrap" style="margin-top:12px">
+            <canvas id="roiChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Free revenue audit</h2>
+        <p>Short form to map lead sources, response times, follow-up gaps, and a deployment plan.</p>
+      </div>
+
+      <div class="panel reveal">
+        <form id="auditForm">
+          <div class="inputsGrid">
+            <div class="field">
+              <label>Business name</label>
+              <input type="text" name="business" placeholder="Example Plumbing Co." required />
+            </div>
+            <div class="field">
+              <label>Contact email</label>
+              <input type="text" name="email" placeholder="name@company.com" required />
+            </div>
+            <div class="field">
+              <label>Monthly leads</label>
+              <input type="number" name="leads" placeholder="80" required />
+            </div>
+            <div class="field">
+              <label>Main lead source</label>
+              <select name="source" required>
+                <option value="">Select one</option>
+                <option>Google Ads</option>
+                <option>Facebook / Instagram</option>
+                <option>Referrals</option>
+                <option>Website SEO</option>
+                <option>Mixed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Current follow-up process</label>
+            <input type="text" name="process" placeholder="Example: calls + WhatsApp, mostly manual" required />
+          </div>
+
+          <div class="formActions">
+            <button class="btn primary" type="submit">Send audit request</button>
+            <span class="note" id="formMsg"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footerRow">
+      <div>© <span id="year"></span> IntelligentSide</div>
+      <div class="footerLinks">
+        <a href="#contact">Contact</a>
+        <a href="#dashboard">Demo UI</a>
+        <a href="#roi">ROI</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modalInner">
+      <div class="panel">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Demo video</h3>
+            <p>Swap in Loom embed</p>
+          </div>
+          <button class="btn" id="closeModal" type="button">Close</button>
+        </div>
+        <div class="videoPlaceholder">
+          <div class="videoText">
+            <div class="videoTitle">Demo placeholder</div>
+            <div class="videoSub">Drop a Loom iframe here after recording a real flow.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- one entry point -->
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
