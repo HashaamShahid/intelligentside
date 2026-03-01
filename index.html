@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#05060a" />
+  <title>IntelligentSide | AI Automation for Plumbing Businesses</title>
+  <meta name="description" content="Premium automation systems for plumbing companies: instant lead response, follow-up, booking, CRM sync, and revenue dashboards." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --bg0:#05060a;
+      --bg1:#070a12;
+      --glass: rgba(255,255,255,0.06);
+      --glass2: rgba(255,255,255,0.10);
+      --stroke: rgba(255,255,255,0.12);
+      --stroke2: rgba(255,255,255,0.18);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.64);
+      --muted2: rgba(255,255,255,0.42);
+      --neon1:#6a5cff;
+      --neon2:#20e3b2;
+      --neon3:#ff2bd6;
+      --warn:#ffcc66;
+      --ok:#77ffb2;
+      --bad:#ff6b6b;
+
+      --radius: 18px;
+      --radius2: 26px;
+      --shadow: 0 20px 80px rgba(0,0,0,0.55);
+      --shadow2: 0 18px 40px rgba(0,0,0,0.45);
+
+      --max: 1200px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% 10%, rgba(106,92,255,0.22), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(32,227,178,0.18), transparent 62%),
+        radial-gradient(1000px 900px at 30% 90%, rgba(255,43,214,0.12), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    button{font-family:inherit}
+
+    /* Animated grid + particles-ish */
+    .bg-grid{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity:0.08;
+      transform: translateZ(0);
+      pointer-events:none;
+      animation: gridMove 18s linear infinite;
+      mask-image: radial-gradient(50% 45% at 50% 35%, black 40%, transparent 78%);
+    }
+    @keyframes gridMove{
+      0%{background-position:0 0, 0 0}
+      100%{background-position:360px 0, 0 360px}
+    }
+
+    /* Cursor glow */
+    .cursor-glow{
+      position:fixed; width:520px; height:520px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at center, rgba(106,92,255,0.18), transparent 55%),
+        radial-gradient(circle at 45% 55%, rgba(32,227,178,0.13), transparent 58%),
+        radial-gradient(circle at 55% 45%, rgba(255,43,214,0.10), transparent 62%);
+      filter: blur(18px);
+      transform: translate(-50%,-50%);
+      pointer-events:none;
+      opacity:0.85;
+      mix-blend-mode: screen;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(6,7,12,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .wrap{
+      max-width: var(--max);
+      margin:0 auto;
+      padding: 0 18px;
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-family: Orbitron, Inter, sans-serif;
+      letter-spacing:0.8px;
+    }
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(106,92,255,0.9), rgba(32,227,178,0.8));
+      box-shadow: 0 10px 26px rgba(106,92,255,0.22);
+      border:1px solid rgba(255,255,255,0.18);
+    }
+    .brand span{font-weight:700}
+    .navlinks{
+      display:flex; gap:16px; align-items:center;
+      color: var(--muted);
+      font-weight:600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .navlinks a{opacity:0.92}
+    .navlinks a:hover{opacity:1; color: rgba(255,255,255,0.92)}
+
+    .cta{
+      display:flex; gap:10px; align-items:center;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-weight:700;
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      cursor:pointer;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22)}
+    .btn.primary{
+      border-color: rgba(106,92,255,0.52);
+      background: linear-gradient(135deg, rgba(106,92,255,0.55), rgba(32,227,178,0.20));
+      box-shadow: 0 16px 44px rgba(106,92,255,0.22);
+    }
+    .btn.primary:hover{
+      border-color: rgba(32,227,178,0.55);
+      box-shadow: 0 18px 50px rgba(32,227,178,0.12);
+    }
+
+    .hero{
+      position:relative;
+      z-index:2;
+      padding: 54px 0 34px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr; gap:18px}
+      .navlinks{display:none}
+    }
+
+    .chiprow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-bottom: 14px;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      color: rgba(255,255,255,0.82);
+      display:flex; align-items:center; gap:8px;
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--neon2);
+      box-shadow: 0 0 14px rgba(32,227,178,0.55);
+    }
+
+    h1{
+      font-family: Orbitron, Inter, sans-serif;
+      font-size: clamp(30px, 4.2vw, 54px);
+      line-height: 1.06;
+      margin: 0 0 10px;
+      letter-spacing: 0.2px;
+    }
+    .sub{
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 18px;
+      max-width: 60ch;
+    }
+    .hero-actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin: 18px 0 10px;
+    }
+    .note{
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .panel{
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.035));
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(800px 280px at 15% 0%, rgba(106,92,255,0.18), transparent 65%),
+                  radial-gradient(700px 260px at 85% 10%, rgba(32,227,178,0.10), transparent 60%),
+                  radial-gradient(520px 280px at 50% 120%, rgba(255,43,214,0.08), transparent 60%);
+      opacity:1;
+      pointer-events:none;
+      z-index:0;
+    }
+    .panel > *{position:relative; z-index:1}
+
+    .miniheader{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .miniheader .title{
+      display:flex; flex-direction:column;
+      gap:2px;
+    }
+    .miniheader h3{
+      margin:0;
+      font-family: Orbitron, Inter, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.7px;
+    }
+    .miniheader p{
+      margin:0;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 520px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(10,12,18,0.35);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      box-shadow: var(--shadow2);
+    }
+    .kpi .label{
+      color: var(--muted2);
+      font-size: 12px;
+      font-weight:700;
+      letter-spacing:0.6px;
+      text-transform: uppercase;
+    }
+    .kpi .value{
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+    .kpi .delta{
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+    }
+    .delta .up{color: var(--ok); font-weight:800}
+    .delta .dn{color: var(--bad); font-weight:800}
+
+    .tabbar{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin: 6px 0 12px;
+    }
+    .tab{
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.80);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing:0.4px;
+      cursor:pointer;
+      transition: background .2s ease, border-color .2s ease, transform .15s ease;
+      user-select:none;
+    }
+    .tab:hover{transform: translateY(-1px); background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.22)}
+    .tab.active{
+      background: linear-gradient(135deg, rgba(106,92,255,0.35), rgba(32,227,178,0.15));
+      border-color: rgba(106,92,255,0.45);
+      color: rgba(255,255,255,0.92);
+    }
+
+    .canvasWrap{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(6,8,14,0.40);
+      border-radius: 18px;
+      padding: 10px;
+    }
+    canvas{width:100% !important; height: 220px !important;}
+
+    section{
+      position:relative;
+      z-index:2;
+      padding: 34px 0;
+    }
+
+    .sectionHead{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:16px;
+      margin-bottom: 14px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-family: Orbitron, Inter, sans-serif;
+      letter-spacing:0.5px;
+      font-size: 18px;
+    }
+    .sectionHead p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 62ch;
+      line-height: 1.55;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 980px){
+      .cards{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+      min-height: 152px;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(320px 180px at 10% 0%, rgba(106,92,255,0.16), transparent 58%),
+                  radial-gradient(280px 170px at 90% 10%, rgba(32,227,178,0.10), transparent 55%);
+      opacity:0.9;
+      pointer-events:none;
+    }
+    .card > *{position:relative; z-index:1}
+    .card h3{
+      margin: 0 0 6px;
+      font-size: 14px;
+      letter-spacing:0.3px;
+      font-weight: 900;
+    }
+    .card p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .flow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){
+      .flow{grid-template-columns:1fr}
+    }
+    .flowBox{
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: var(--shadow2);
+    }
+    .flowBox h3{
+      margin:0 0 10px;
+      font-family: Orbitron, Inter, sans-serif;
+      font-size: 14px;
+      letter-spacing:0.7px;
+    }
+    .rows{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(8,10,16,0.35);
+      border-radius: 16px;
+      padding: 10px 10px;
+    }
+    .row .left{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .row .left strong{
+      font-size: 13px;
+      letter-spacing:0.2px;
+    }
+    .row .left span{
+      font-size: 12px;
+      color: var(--muted2);
+    }
+    .pill{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:0.4px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.86);
+      white-space:nowrap;
+    }
+    .pill.ok{border-color: rgba(32,227,178,0.35); background: rgba(32,227,178,0.08)}
+    .pill.warn{border-color: rgba(255,204,102,0.35); background: rgba(255,204,102,0.08)}
+    .pill.hot{border-color: rgba(255,43,214,0.35); background: rgba(255,43,214,0.08)}
+
+    .calc{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){
+      .calc{grid-template-columns:1fr}
+    }
+    .calc .panel{padding: 14px}
+    .field{
+      display:flex; flex-direction:column; gap:8px;
+      margin-bottom: 12px;
+    }
+    .field label{
+      font-size: 12px;
+      color: var(--muted2);
+      font-weight: 900;
+      letter-spacing:0.5px;
+      text-transform: uppercase;
+    }
+    .field input[type="range"]{width:100%}
+    .field input[type="number"], .field input[type="text"], .field select{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(5,6,10,0.5);
+      color: rgba(255,255,255,0.92);
+      padding: 10px 12px;
+      outline:none;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 520px){
+      .split{grid-template-columns:1fr}
+    }
+    .result{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 520px){
+      .result{grid-template-columns:1fr}
+    }
+
+    footer{
+      padding: 26px 0 46px;
+      color: var(--muted2);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      position:relative;
+      z-index:2;
+    }
+
+    /* reveal on scroll */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.on{
+      opacity:1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="cursor-glow" id="glow"></div>
+
+  <header class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <span>IntelligentSide</span>
+        </div>
+
+        <nav class="navlinks">
+          <a href="#systems">systems</a>
+          <a href="#dashboard">dashboard</a>
+          <a href="#case-studies">case studies</a>
+          <a href="#roi">roi</a>
+          <a href="#contact">contact</a>
+        </nav>
+
+        <div class="cta">
+          <a class="btn" href="#dashboard">View Demo UI</a>
+          <a class="btn primary" href="#contact">Free Revenue Audit</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="wrap hero-grid">
+      <div class="reveal">
+        <div class="chiprow">
+          <div class="chip"><span class="dot"></span>Plumbing-focused automation</div>
+          <div class="chip"><span class="dot" style="background:var(--neon1)"></span>Instant lead response</div>
+          <div class="chip"><span class="dot" style="background:var(--neon3)"></span>Premium dashboards</div>
+        </div>
+
+        <h1>Stop losing plumbing jobs to missed calls.</h1>
+        <p class="sub">
+          Premium automation systems that reply instantly, follow up automatically, and book more jobs
+          without adding admin overhead.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#contact">Book Free Audit</a>
+          <button class="btn" id="openModal">Watch 2-min demo</button>
+        </div>
+
+        <div class="note">
+          Deployment vibe: fast, modern, and measurable. Real dashboards. Real workflows. No buzzword soup.
+        </div>
+      </div>
+
+      <aside class="panel reveal" aria-label="Dashboard preview panel">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Revenue Command Center</h3>
+            <p>Interactive demo dashboard (sample data)</p>
+          </div>
+          <span class="pill ok">Live</span>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">response time</div>
+            <div class="value" id="kpiResponse">00:42</div>
+            <div class="delta"><span class="up">▲</span> 84% faster</div>
+          </div>
+          <div class="kpi">
+            <div class="label">bookings</div>
+            <div class="value" id="kpiBookings">+23%</div>
+            <div class="delta"><span class="up">▲</span> week over week</div>
+          </div>
+          <div class="kpi">
+            <div class="label">lost leads</div>
+            <div class="value" id="kpiLost">-31%</div>
+            <div class="delta"><span class="up">▲</span> recovered</div>
+          </div>
+        </div>
+
+        <div class="tabbar" role="tablist" aria-label="Dashboard tabs">
+          <div class="tab active" data-tab="pipeline">pipeline</div>
+          <div class="tab" data-tab="speed">speed</div>
+          <div class="tab" data-tab="revenue">revenue</div>
+        </div>
+
+        <div class="canvasWrap">
+          <canvas id="heroChart"></canvas>
+        </div>
+
+        <div class="note" style="margin-top:10px">
+          Tip: tabs simulate different widgets a client would see after deployment.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section id="systems">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Systems built for plumbing reality</h2>
+        <p>Every component targets the real mess: missed calls, slow callbacks, after-hours leads, and inconsistent follow-up.</p>
+      </div>
+
+      <div class="cards">
+        <div class="card reveal">
+          <h3>Instant Response Engine</h3>
+          <p>Missed-call auto text, website lead reply, Facebook/Google lead capture, and after-hours routing.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Smart Follow-Up Sequences</h3>
+          <p>Multi-step follow-up that turns “maybe later” into booked jobs. Includes reminders and confirmations.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Booking + CRM Sync</h3>
+          <p>Calendar booking, lead pipeline stages, job value tracking, and a clean dashboard for performance visibility.</p>
+        </div>
+      </div>
+
+      <div class="flow" style="margin-top:12px">
+        <div class="flowBox reveal">
+          <h3>Workflow visual: Lead → Booking</h3>
+          <div class="rows">
+            <div class="row">
+              <div class="left">
+                <strong>Lead captured</strong>
+                <span>Website form, Facebook lead, missed call</span>
+              </div>
+              <span class="pill ok">0–30 sec</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>Instant reply</strong>
+                <span>SMS or WhatsApp + email confirmation</span>
+              </div>
+              <span class="pill ok">under 1 min</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>Follow-up sequence</strong>
+                <span>Auto nudges + fast booking link</span>
+              </div>
+              <span class="pill warn">1–24 hrs</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>Booking confirmed</strong>
+                <span>Calendar event + reminder automation</span>
+              </div>
+              <span class="pill hot">locked</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flowBox reveal">
+          <h3>Workflow visual: Reviews + retention</h3>
+          <div class="rows">
+            <div class="row">
+              <div class="left">
+                <strong>Job completed</strong>
+                <span>Triggered by CRM stage change</span>
+              </div>
+              <span class="pill ok">instant</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>Review request</strong>
+                <span>SMS request + Google link</span>
+              </div>
+              <span class="pill ok">1–2 min</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>No review?</strong>
+                <span>Gentle follow-up after 48 hrs</span>
+              </div>
+              <span class="pill warn">48 hrs</span>
+            </div>
+            <div class="row">
+              <div class="left">
+                <strong>Maintenance upsell</strong>
+                <span>Seasonal reminders + reactivation</span>
+              </div>
+              <span class="pill hot">monthly</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboard">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Premium dashboard experience</h2>
+        <p>Clients see revenue impact clearly: response speed, pipeline movement, booking rate, and recovered leads.</p>
+      </div>
+
+      <div class="panel reveal">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Client Dashboard (Demo)</h3>
+            <p>Toggle widgets to preview different views</p>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="pill ok" id="badgeMode">Mode: Pipeline</span>
+            <button class="btn" id="shuffle">Shuffle Data</button>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab active" data-dash="pipeline">Pipeline</div>
+          <div class="tab" data-dash="speed">Speed to Lead</div>
+          <div class="tab" data-dash="revenue">Revenue Uplift</div>
+          <div class="tab" data-dash="quality">Lead Quality</div>
+        </div>
+
+        <div class="flow" style="margin-top:10px">
+          <div class="canvasWrap">
+            <canvas id="dashChartA"></canvas>
+          </div>
+          <div class="canvasWrap">
+            <canvas id="dashChartB"></canvas>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:12px">
+          Visual style intentionally mirrors a high-end SaaS product, not a generic agency brochure.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="case-studies">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Case studies (modeled examples)</h2>
+        <p>Examples show typical impact when response time drops under 1 minute and follow-up becomes consistent.</p>
+      </div>
+
+      <div class="cards">
+        <div class="card reveal">
+          <h3>Emergency Lead Capture</h3>
+          <p>Missed-call auto responses recover urgent calls and route bookings faster.</p>
+          <div class="pill ok" style="margin-top:10px">Outcome: recovered leads ↑</div>
+        </div>
+        <div class="card reveal">
+          <h3>Follow-up Discipline</h3>
+          <p>Multi-step follow-up converts “quote requests” into booked jobs.</p>
+          <div class="pill warn" style="margin-top:10px">Outcome: booking rate ↑</div>
+        </div>
+        <div class="card reveal">
+          <h3>Reviews + Retention</h3>
+          <p>Review prompts and maintenance reminders create compounding trust and repeat work.</p>
+          <div class="pill hot" style="margin-top:10px">Outcome: repeat jobs ↑</div>
+        </div>
+      </div>
+
+      <div class="panel reveal" style="margin-top:12px">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Case Study Dashboard Snapshot</h3>
+            <p>What a client sees after deployment</p>
+          </div>
+          <span class="pill ok">Snapshot</span>
+        </div>
+        <div class="flow" style="margin-top:10px">
+          <div class="canvasWrap">
+            <canvas id="caseChart"></canvas>
+          </div>
+          <div class="canvasWrap">
+            <canvas id="caseChart2"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roi">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>ROI simulator</h2>
+        <p>Quick model to estimate revenue uplift from faster response + consistent follow-up.</p>
+      </div>
+
+      <div class="calc">
+        <div class="panel reveal">
+          <div class="miniheader">
+            <div class="title">
+              <h3>Inputs</h3>
+              <p>Adjust to match a plumbing business</p>
+            </div>
+            <span class="pill warn">Model</span>
+          </div>
+
+          <div class="split">
+            <div class="field">
+              <label>Monthly leads</label>
+              <input id="leads" type="number" value="80" min="5" max="2000" />
+            </div>
+            <div class="field">
+              <label>Average job value</label>
+              <input id="jobValue" type="number" value="300" min="20" max="50000" />
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="field">
+              <label>Current booking rate (%)</label>
+              <input id="bookRate" type="number" value="40" min="1" max="100" />
+            </div>
+            <div class="field">
+              <label>Expected uplift (pp)</label>
+              <input id="uplift" type="number" value="15" min="0" max="60" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Speed to lead improvement</label>
+            <input id="speed" type="range" value="80" min="0" max="100" />
+            <div class="note">Drag to simulate faster replies + better routing</div>
+          </div>
+
+          <button class="btn primary" id="calcBtn">Recalculate</button>
+        </div>
+
+        <div class="panel reveal">
+          <div class="miniheader">
+            <div class="title">
+              <h3>Estimated impact</h3>
+              <p>Transparent math, no magic</p>
+            </div>
+            <span class="pill ok" id="impactBadge">Projected</span>
+          </div>
+
+          <div class="result">
+            <div class="kpi">
+              <div class="label">extra jobs / month</div>
+              <div class="value" id="extraJobs">+0</div>
+              <div class="delta">from uplift + speed gains</div>
+            </div>
+            <div class="kpi">
+              <div class="label">extra revenue / month</div>
+              <div class="value" id="extraRev">$0</div>
+              <div class="delta">based on job value</div>
+            </div>
+            <div class="kpi">
+              <div class="label">extra revenue / year</div>
+              <div class="value" id="extraYear">$0</div>
+              <div class="delta">compounding results</div>
+            </div>
+          </div>
+
+          <div class="canvasWrap" style="margin-top:12px">
+            <canvas id="roiChart"></canvas>
+          </div>
+
+          <div class="note" style="margin-top:12px">
+            Results depend on lead quality, offer strength, and the team’s ability to deliver.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Free revenue audit</h2>
+        <p>Short form to map lead sources, response times, follow-up gaps, and a deployment plan.</p>
+      </div>
+
+      <div class="panel reveal">
+        <form id="auditForm">
+          <div class="split">
+            <div class="field">
+              <label>Business name</label>
+              <input type="text" name="business" placeholder="Example Plumbing Co." required />
+            </div>
+            <div class="field">
+              <label>Contact email</label>
+              <input type="text" name="email" placeholder="name@company.com" required />
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="field">
+              <label>Monthly leads (approx.)</label>
+              <input type="number" name="leads" placeholder="80" required />
+            </div>
+            <div class="field">
+              <label>Main lead source</label>
+              <select name="source" required>
+                <option value="">Select one</option>
+                <option>Google Ads</option>
+                <option>Facebook / Instagram</option>
+                <option>Referrals</option>
+                <option>Website SEO</option>
+                <option>Mixed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Current follow-up process</label>
+            <input type="text" name="process" placeholder="Example: calls + WhatsApp, mostly manual" required />
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button class="btn primary" type="submit">Send audit request</button>
+            <a class="btn" href="#systems">View systems</a>
+            <span class="note" id="formMsg"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>© <span id="year"></span> IntelligentSide • Premium automation for plumbing businesses</div>
+        <div style="display:flex; gap:14px;">
+          <a href="#contact">Contact</a>
+          <a href="#roi">ROI</a>
+          <a href="#dashboard">Demo UI</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Demo modal -->
+  <div id="modal" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.65); backdrop-filter: blur(10px);">
+    <div style="max-width:920px; margin:6vh auto; padding: 0 16px;">
+      <div class="panel" style="padding:14px;">
+        <div class="miniheader">
+          <div class="title">
+            <h3>Demo video</h3>
+            <p>Replace placeholder with Loom or YouTube embed</p>
+          </div>
+          <button class="btn" id="closeModal">Close</button>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,0.10); border-radius:18px; overflow:hidden; background:rgba(0,0,0,0.25)">
+          <div style="aspect-ratio:16/9; display:grid; place-items:center; color:rgba(255,255,255,0.75); padding: 18px;">
+            <div style="text-align:center; max-width: 64ch;">
+              <div style="font-family:Orbitron,Inter,sans-serif; letter-spacing:0.8px; font-weight:800; margin-bottom:8px;">
+                Demo placeholder
+              </div>
+              <div style="color:rgba(255,255,255,0.62); font-size:13px; line-height:1.6;">
+                Drop a Loom iframe here once a real automation flow is recorded.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:10px;">
+          A real 2–3 minute screen recording makes this site feel instantly premium and legit.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Cursor glow follow
+    const glow = document.getElementById('glow');
+    window.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    }, {passive:true});
+
+    // Scroll reveal
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting) en.target.classList.add('on');
+      });
+    }, {threshold:0.12});
+    revealEls.forEach(el=>io.observe(el));
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Modal
+    const modal = document.getElementById('modal');
+    document.getElementById('openModal').addEventListener('click', ()=> modal.style.display='block');
+    document.getElementById('closeModal').addEventListener('click', ()=> modal.style.display='none');
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.style.display='none'; });
+
+    // Helpers
+    const fmtMoney = (n) => {
+      const x = Math.round(n);
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    // Chart defaults for neon UI
+    Chart.defaults.color = "rgba(255,255,255,0.72)";
+    Chart.defaults.borderColor = "rgba(255,255,255,0.10)";
+    Chart.defaults.font.family = "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+
+    // Hero chart (tabbed)
+    const heroCtx = document.getElementById('heroChart');
+    let heroChart;
+
+    const heroData = {
+      pipeline: {
+        labels: ["New", "Contacted", "Quoted", "Booked", "Completed"],
+        values: [48, 36, 22, 18, 15]
+      },
+      speed: {
+        labels: ["0-1m", "1-5m", "5-15m", "15-60m", "1h+"],
+        values: [44, 22, 14, 10, 10]
+      },
+      revenue: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        values: [1200, 1650, 1420, 2100, 2350, 1900, 1600]
+      }
+    };
+
+    function buildHero(type){
+      const d = heroData[type];
+      const isRevenue = type === "revenue";
+      const chartType = isRevenue ? "line" : "bar";
+
+      if(heroChart) heroChart.destroy();
+
+      heroChart = new Chart(heroCtx, {
+        type: chartType,
+        data: {
+          labels: d.labels,
+          datasets: [{
+            label: isRevenue ? "Revenue ($)" : "Leads",
+            data: d.values,
+            tension: 0.35,
+            fill: isRevenue ? true : false,
+            backgroundColor: isRevenue ? "rgba(106,92,255,0.22)" : "rgba(32,227,178,0.18)",
+            borderColor: isRevenue ? "rgba(106,92,255,0.70)" : "rgba(32,227,178,0.72)",
+            borderWidth: 2,
+            pointRadius: isRevenue ? 3 : 0,
+            pointHoverRadius: isRevenue ? 5 : 0
+          }]
+        },
+        options: {
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins: {
+            legend: {display:false},
+            tooltip: {
+              backgroundColor: "rgba(8,10,18,0.92)",
+              borderColor: "rgba(255,255,255,0.14)",
+              borderWidth: 1,
+              titleColor: "rgba(255,255,255,0.90)",
+              bodyColor: "rgba(255,255,255,0.78)"
+            }
+          },
+          scales: {
+            x: {grid: {display:false}},
+            y: {beginAtZero:true}
+          }
+        }
+      });
+    }
+
+    buildHero("pipeline");
+
+    // Hero tabs
+    document.querySelectorAll('.tabbar .tab[data-tab]').forEach(t=>{
+      t.addEventListener('click', ()=>{
+        document.querySelectorAll('.tabbar .tab[data-tab]').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        buildHero(t.dataset.tab);
+      });
+    });
+
+    // Dashboard charts (double)
+    const dashA = document.getElementById('dashChartA');
+    const dashB = document.getElementById('dashChartB');
+    let dashChartA, dashChartB;
+
+    function randRange(min,max){ return Math.round(min + Math.random()*(max-min)); }
+
+    const dashModes = {
+      pipeline(){
+        return {
+          badge: "Mode: Pipeline",
+          a: {type:"bar", labels:["New","Contacted","Quoted","Booked"], data:[randRange(30,70), randRange(22,55), randRange(12,34), randRange(10,28)], label:"Leads"},
+          b: {type:"doughnut", labels:["Booked","Not booked"], data:[randRange(18,32), randRange(42,68)], label:"Booking split"}
+        };
+      },
+      speed(){
+        return {
+          badge: "Mode: Speed",
+          a: {type:"line", labels:["Week 1","Week 2","Week 3","Week 4"], data:[randRange(7,20), randRange(4,12), randRange(1,6), randRange(0,3)], label:"Avg response (min)"},
+          b: {type:"bar", labels:["0-1m","1-5m","5-15m","15m+"], data:[randRange(35,55), randRange(15,28), randRange(8,18), randRange(3,12)], label:"Lead buckets"}
+        };
+      },
+      revenue(){
+        return {
+          badge: "Mode: Revenue",
+          a: {type:"line", labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], data:[randRange(1200,2400), randRange(1100,2600), randRange(900,2400), randRange(1500,3100), randRange(1700,3300), randRange(1200,2700), randRange(1000,2400)], label:"Revenue ($)"},
+          b: {type:"bar", labels:["Recovered","Organic","Paid"], data:[randRange(400,1200), randRange(700,1800), randRange(600,1600)], label:"Attribution ($)"}
+        };
+      },
+      quality(){
+        return {
+          badge: "Mode: Lead Quality",
+          a: {type:"bar", labels:["Emergency","Install","Repair","Maintenance"], data:[randRange(14,32), randRange(10,26), randRange(20,46), randRange(8,20)], label:"Leads"},
+          b: {type:"line", labels:["Low","Mid","High"], data:[randRange(18,30), randRange(28,48), randRange(42,65)], label:"Booking rate (%)"}
+        };
+      }
+    };
+
+    function buildDash(mode){
+      const pack = dashModes[mode]();
+      document.getElementById('badgeMode').textContent = pack.badge;
+
+      if(dashChartA) dashChartA.destroy();
+      if(dashChartB) dashChartB.destroy();
+
+      dashChartA = new Chart(dashA, {
+        type: pack.a.type,
+        data: {
+          labels: pack.a.labels,
+          datasets: [{
+            label: pack.a.label,
+            data: pack.a.data,
+            tension: 0.35,
+            backgroundColor: "rgba(106,92,255,0.18)",
+            borderColor: "rgba(106,92,255,0.74)",
+            borderWidth: 2,
+            fill: pack.a.type === "line",
+            pointRadius: pack.a.type === "line" ? 3 : 0
+          }]
+        },
+        options: {
+          plugins:{legend:{display:false}},
+          scales:{x:{grid:{display:false}}, y:{beginAtZero:true}}
+        }
+      });
+
+      dashChartB = new Chart(dashB, {
+        type: pack.b.type,
+        data: {
+          labels: pack.b.labels,
+          datasets: [{
+            label: pack.b.label,
+            data: pack.b.data,
+            backgroundColor: [
+              "rgba(32,227,178,0.22)",
+              "rgba(255,43,214,0.16)",
+              "rgba(106,92,255,0.18)",
+              "rgba(255,204,102,0.18)"
+            ],
+            borderColor: "rgba(255,255,255,0.10)",
+            borderWidth: 1.2
+          }]
+        },
+        options: {
+          plugins:{legend:{display:false}},
+          cutout: pack.b.type === "doughnut" ? "62%" : undefined
+        }
+      });
+    }
+
+    buildDash("pipeline");
+
+    document.querySelectorAll('.tabbar .tab[data-dash]').forEach(t=>{
+      t.addEventListener('click', ()=>{
+        document.querySelectorAll('.tabbar .tab[data-dash]').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        buildDash(t.dataset.dash);
+      });
+    });
+
+    document.getElementById('shuffle').addEventListener('click', ()=>{
+      const active = document.querySelector('.tabbar .tab[data-dash].active');
+      buildDash(active ? active.dataset.dash : "pipeline");
+    });
+
+    // Case study charts
+    const caseChart = new Chart(document.getElementById('caseChart'), {
+      type: "line",
+      data: {
+        labels: ["Week 1","Week 2","Week 3","Week 4"],
+        datasets: [{
+          label: "Booking rate (%)",
+          data: [38, 44, 50, 55],
+          tension: 0.35,
+          fill: true,
+          backgroundColor: "rgba(32,227,178,0.16)",
+          borderColor: "rgba(32,227,178,0.74)",
+          borderWidth: 2,
+          pointRadius: 3
+        }]
+      },
+      options: {plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{beginAtZero:true, max:70}}}
+    });
+
+    const caseChart2 = new Chart(document.getElementById('caseChart2'), {
+      type: "bar",
+      data: {
+        labels: ["Missed calls","Recovered","Booked"],
+        datasets: [{
+          label: "Count",
+          data: [28, 19, 14],
+          backgroundColor: "rgba(255,43,214,0.14)",
+          borderColor: "rgba(255,43,214,0.64)",
+          borderWidth: 1.8
+        }]
+      },
+      options: {plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{beginAtZero:true}}}
+    });
+
+    // ROI chart
+    const roiCtx = document.getElementById('roiChart');
+    let roiChart = new Chart(roiCtx, {
+      type:"line",
+      data:{
+        labels:["Month 1","Month 2","Month 3","Month 4","Month 5","Month 6"],
+        datasets:[{
+          label:"Projected uplift ($)",
+          data:[0,0,0,0,0,0],
+          tension:0.35,
+          fill:true,
+          backgroundColor:"rgba(106,92,255,0.18)",
+          borderColor:"rgba(106,92,255,0.72)",
+          borderWidth:2,
+          pointRadius:3
+        }]
+      },
+      options:{plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{beginAtZero:true}}}
+    });
+
+    function recalc(){
+      const leads = Math.max(1, Number(document.getElementById('leads').value || 0));
+      const jobValue = Math.max(0, Number(document.getElementById('jobValue').value || 0));
+      const baseRate = Math.min(100, Math.max(0, Number(document.getElementById('bookRate').value || 0)));
+      const uplift = Math.min(80, Math.max(0, Number(document.getElementById('uplift').value || 0)));
+      const speed = Number(document.getElementById('speed').value || 0);
+
+      // Model:
+      // base bookings = leads * baseRate
+      // uplift adds percentage points
+      // speed adds up to +6pp depending on slider
+      const speedBonus = (speed/100) * 6; // max 6pp
+      const newRate = Math.min(95, baseRate + uplift + speedBonus);
+
+      const baseJobs = leads * (baseRate/100);
+      const newJobs = leads * (newRate/100);
+
+      const extraJobs = Math.max(0, newJobs - baseJobs);
+      const extraRev = extraJobs * jobValue;
+      const extraYear = extraRev * 12;
+
+      document.getElementById('extraJobs').textContent = "+" + Math.round(extraJobs);
+      document.getElementById('extraRev').textContent = "$" + fmtMoney(extraRev);
+      document.getElementById('extraYear').textContent = "$" + fmtMoney(extraYear);
+
+      const series = [1,2,3,4,5,6].map(m => Math.round(extraRev * (0.55 + 0.10*m))); // ramp-up curve
+      roiChart.data.datasets[0].data = series;
+      roiChart.update();
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', recalc);
+    ["leads","jobValue","bookRate","uplift","speed"].forEach(id=>{
+      document.getElementById(id).addEventListener('input', recalc);
+    });
+    recalc();
+
+    // Form: demo-only behavior
+    const form = document.getElementById('auditForm');
+    const msg = document.getElementById('formMsg');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      msg.textContent = "Request captured (demo). Replace with real endpoint or email service.";
+      msg.style.color = "rgba(32,227,178,0.85)";
+      form.reset();
+      setTimeout(()=>{ msg.textContent=""; }, 5000);
+    });
+
+    // Dashboard KPI ticker (small animation)
+    let tick = 42;
+    setInterval(()=>{
+      tick = Math.max(18, Math.min(58, tick + (Math.random()>0.5?1:-1)));
+      const mm = Math.floor(tick/60);
+      const ss = (tick%60).toString().padStart(2,'0');
+      document.getElementById('kpiResponse').textContent = `${mm.toString().padStart(2,'0')}:${ss}`;
+      document.getElementById('kpiBookings').textContent = `+${randRange(18,29)}%`;
+      document.getElementById('kpiLost').textContent = `-${randRange(18,38)}%`;
+    }, 2600);
+  </script>
+</body>
+</html>
