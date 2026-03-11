@@ -462,33 +462,38 @@
               </p>
             </div>
 
-            <form class="contact-form">
+            <form 
+            class="contact-form"
+            action="https://formsubmit.co/contact@intelligentside.com"
+            method="POST"
+            >
+            <input type="hidden" name="_cc" value="hsyz2019@gmail.com">
+            <input type="hidden" name="_subject" value="New IntelligentSide Website Lead">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+              
               <div class="field">
                 <label for="name">Name</label>
-                <input id="name" type="text" placeholder="Your name" />
+                <input id="name" name="name" type="text" placeholder="Your name" required>
               </div>
 
               <div class="field">
                 <label for="company">Company</label>
-                <input id="company" type="text" placeholder="Business name" />
+                <input id="company" name="company" type="text" placeholder="Business name" required>
               </div>
 
               <div class="field">
                 <label for="type">Business Type</label>
-                <select id="type">
+                <select id="type" name="businessType" required>
                   <option>Plumbing Company</option>
                   <option>Call Center</option>
                   <option>Other Service Business</option>
                 </select>
               </div>
-
+              
               <div class="field">
                 <label for="message">What do you want fixed?</label>
-                <textarea
-                  id="message"
-                  rows="5"
-                  placeholder="Missed calls, lead qualification, dispatch, QA, reporting..."
-                ></textarea>
+                <textarea id="message" name="message" rows="5" placeholder="What do you want fixed?" required></textarea>
               </div>
 
               <button type="submit" class="btn btn-primary btn-full">
@@ -514,4 +519,5 @@
 
     <script src="script.js"></script>
   </body>
+
 </html>
