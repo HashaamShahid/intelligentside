@@ -57,9 +57,12 @@ counters.forEach((counter) => counterObserver.observe(counter));
 const form = document.querySelector(".contact-form");
 
 form?.addEventListener("submit", () => {
-  const button = form.querySelector("button");
-  button.textContent = "Sending...";
-  button.disabled = true;
+  const button = form.querySelector('button[type="submit"]');
+
+  if (button) {
+    button.textContent = "Sending...";
+    button.disabled = true;
+  }
 });
 
 document.addEventListener("mousemove", (e) => {
@@ -72,5 +75,4 @@ document.addEventListener("mousemove", (e) => {
     const moveY = (y - 0.5) * intensity;
     blob.style.transform = `translate(${moveX}px, ${moveY}px)`;
   });
-
 });
