@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IntelligentSide — AI Systems for Plumbers & Call Centers</title>
     <meta
       name="description"
@@ -309,7 +306,7 @@
             <h2>What premium outcomes look like</h2>
             <p>
               These visuals are here to make the service feel tangible. Rich
-              systems sell better than vague promises. Wild concept, I know.
+              systems sell better than vague promises.
             </p>
           </div>
 
@@ -367,7 +364,7 @@
               </div>
               <p>
                 Managers see patterns across hundreds of calls without manually
-                listening to everything like audio archaeologists.
+                listening to everything.
               </p>
             </div>
 
@@ -462,38 +459,69 @@
               </p>
             </div>
 
-            <form 
-            class="contact-form"
-            action="https://formsubmit.co/contact@intelligentside.com"
-            method="POST"
+            <form
+              class="contact-form"
+              action="https://formsubmit.co/contact@intelligentside.com"
+              method="POST"
             >
-            <input type="hidden" name="_cc" value="hsyz2019@gmail.com">
-            <input type="hidden" name="_subject" value="New IntelligentSide Website Lead">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
-              
+              <input type="hidden" name="_cc" value="hsyz2019@gmail.com" />
+              <input type="hidden" name="_subject" value="New IntelligentSide Website Lead" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value="https://intelligentside.com/thanks.html" />
+
               <div class="field">
                 <label for="name">Name</label>
-                <input id="name" name="name" type="text" placeholder="Your name" required>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Your name"
+                  required
+                />
               </div>
 
               <div class="field">
                 <label for="company">Company</label>
-                <input id="company" name="company" type="text" placeholder="Business name" required>
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  placeholder="Business name"
+                  required
+                />
               </div>
 
               <div class="field">
                 <label for="type">Business Type</label>
                 <select id="type" name="businessType" required>
-                  <option>Plumbing Company</option>
-                  <option>Call Center</option>
-                  <option>Other Service Business</option>
+                  <option value="" disabled selected>Select business type</option>
+                  <option value="Plumbing Company">Plumbing Company</option>
+                  <option value="Call Center">Call Center</option>
+                  <option value="Other Service Business">Other Service Business</option>
                 </select>
               </div>
-              
+
+              <div class="field">
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+
               <div class="field">
                 <label for="message">What do you want fixed?</label>
-                <textarea id="message" name="message" rows="5" placeholder="What do you want fixed?" required></textarea>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder="Missed calls, lead qualification, dispatch, QA, reporting..."
+                  required
+                ></textarea>
               </div>
 
               <button type="submit" class="btn btn-primary btn-full">
@@ -519,5 +547,4 @@
 
     <script src="script.js"></script>
   </body>
-
 </html>
