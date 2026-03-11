@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IntelligentSide | Premium Systems for Call Centers</title>
+  <meta name="description" content="Premium automation, QA visibility, routing intelligence, and revenue dashboards for modern call centers." />
+  <meta name="theme-color" content="#05070d" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#05070d;
+      --bg2:#0a0f19;
+      --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.035);
+      --line:rgba(255,255,255,0.10);
+      --line2:rgba(255,255,255,0.16);
+      --text:rgba(255,255,255,0.94);
+      --muted:rgba(255,255,255,0.62);
+      --muted2:rgba(255,255,255,0.42);
+      --accent:#6f7cff;
+      --accent2:#19d6c2;
+      --accent3:#d568ff;
+      --ok:#79f0b2;
+      --warn:#ffd36d;
+      --bad:#ff7e7e;
+      --shadow:0 24px 80px rgba(0,0,0,.48);
+      --radius:22px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 700px at 10% 0%, rgba(111,124,255,.16), transparent 62%),
+        radial-gradient(900px 700px at 90% 20%, rgba(25,214,194,.10), transparent 60%),
+        radial-gradient(900px 700px at 50% 100%, rgba(213,104,255,.08), transparent 60%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity:.25;
+      mask-image: radial-gradient(circle at center, #000 35%, transparent 82%);
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:blur(16px);
+      background:rgba(5,7,13,.65);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:74px; gap:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800;
+      letter-spacing:.2px;
+    }
+    .mark{
+      width:38px;height:38px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 12px 30px rgba(111,124,255,.25);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .brand span{font-family:"Space Grotesk",Inter,sans-serif;font-size:18px}
+    .navlinks{
+      display:flex; gap:18px; color:var(--muted); font-size:14px; font-weight:600;
+    }
+    .navlinks a:hover{color:var(--text)}
+    .ctaRow{display:flex; gap:10px}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.18s ease;
+      box-shadow:0 12px 30px rgba(0,0,0,.22);
+    }
+    .btn:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.20)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(111,124,255,.40), rgba(25,214,194,.12));
+      border-color:rgba(111,124,255,.42);
+    }
+
+    .hero{
+      padding:72px 0 34px;
+      position:relative;
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:20px;
+      align-items:start;
+    }
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 12px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      color:rgba(255,255,255,.82);
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+    .eyedot{
+      width:8px; height:8px; border-radius:50%;
+      background:var(--accent2);
+      box-shadow:0 0 14px rgba(25,214,194,.55);
+    }
+    h1{
+      margin:0 0 12px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:clamp(36px,5vw,66px);
+      line-height:.98;
+      letter-spacing:-1.4px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.7;
+      max-width:58ch;
+    }
+    .heroActions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .panel{
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::after{
+      content:"";
+      position:absolute; left:16px; right:16px; top:10px; height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    .heroCard{padding:16px}
+    .miniTop{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; margin-bottom:14px;
+    }
+    .miniTitle h3{
+      margin:0;
+      font-size:14px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      letter-spacing:.3px;
+    }
+    .miniTitle p{
+      margin:2px 0 0;
+      font-size:12px;
+      color:var(--muted2);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      font-weight:800;
+      color:rgba(255,255,255,.86);
+    }
+    .pill.ok{
+      border-color:rgba(121,240,178,.28);
+      background:rgba(121,240,178,.08);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .stat{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+    }
+    .statLabel{
+      color:var(--muted2);
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .statValue{
+      font-size:24px;
+      font-weight:800;
+      line-height:1;
+      margin-bottom:4px;
+    }
+    .statSub{font-size:12px;color:var(--muted)}
+
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .tab{
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .tab.active{
+      color:var(--text);
+      border-color:rgba(111,124,255,.42);
+      background:linear-gradient(135deg, rgba(111,124,255,.22), rgba(25,214,194,.08));
+    }
+    .chartWrap{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(4,7,14,.62);
+    }
+    canvas{width:100% !important; height:260px !important;}
+
+    section{padding:34px 0}
+    .sectionHead{
+      display:flex; align-items:end; justify-content:space-between;
+      gap:16px; margin-bottom:16px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:24px;
+      letter-spacing:-.4px;
+    }
+    .sectionHead p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      max-width:60ch;
+      line-height:1.6;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    .card{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      box-shadow:0 14px 34px rgba(0,0,0,.22);
+      transition:.18s ease;
+    }
+    .card:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.16)}
+    .card h3{
+      margin:0 0 8px;
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:-.2px;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+    .cardNum{
+      width:38px;height:38px;border-radius:12px;
+      display:grid;place-items:center;
+      margin-bottom:12px;
+      border:1px solid rgba(111,124,255,.34);
+      background:rgba(111,124,255,.11);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .command{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:12px;
+    }
+    .stack{
+      display:grid;
+      gap:12px;
+    }
+    .miniPanel{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    .feed{
+      display:grid; gap:10px;
+    }
+    .feedRow{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:center;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      font-size:13px;
+    }
+    .tag{
+      display:inline-flex;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:rgba(255,255,255,.84);
+    }
+    .tag.sales{border-color:rgba(121,240,178,.24); background:rgba(121,240,178,.08)}
+    .tag.qa{border-color:rgba(255,211,109,.22); background:rgba(255,211,109,.08)}
+    .tag.support{border-color:rgba(111,124,255,.22); background:rgba(111,124,255,.08)}
+
+    .proof{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+    .proofCard{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+    }
+    .proofCard strong{
+      display:block;
+      font-size:28px;
+      letter-spacing:-.8px;
+      margin-bottom:6px;
+    }
+    .proofCard span{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .ctaBox{
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .ctaBox h2{
+      margin:0 0 8px;
+      font-size:28px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      letter-spacing:-.6px;
+    }
+    .ctaBox p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14px;
+      max-width:60ch;
+    }
+
+    footer{
+      padding:24px 0 44px;
+      color:var(--muted2);
+      font-size:12px;
+    }
+    .foot{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:20px;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform:none;
+    }
+
+    @media (max-width: 1024px){
+      .heroGrid,.command,.ctaBox{grid-template-columns:1fr; display:grid}
+      .proof{grid-template-columns:repeat(2,1fr)}
+      .grid3{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .navlinks{display:none}
+      .stats,.proof{grid-template-columns:1fr}
+      h1{font-size:42px}
+      .ctaRow{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#">
+        <div class="mark"></div>
+        <span>IntelligentSide</span>
+      </a>
+
+      <nav class="navlinks">
+        <a href="#solutions">Solutions</a>
+        <a href="#command">Command Center</a>
+        <a href="#results">Results</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="ctaRow">
+        <a class="btn" href="#command">View Demo</a>
+        <a class="btn primary" href="#contact">Book Audit</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="wrap heroGrid">
+      <div class="reveal">
+        <div class="eyebrow">
+          <span class="eyedot"></span>
+          Premium systems for modern call centers
+        </div>
+
+        <h1>Turn every conversation into tracked revenue.</h1>
+        <p>
+          Routing intelligence, QA visibility, agent dashboards, and performance systems built
+          for call centers that care about conversion, speed, and control.
+        </p>
+
+        <div class="heroActions">
+          <a class="btn primary" href="#contact">Get a Call Center Audit</a>
+          <a class="btn" href="#command">See Command Center</a>
+        </div>
+      </div>
+
+      <div class="panel heroCard reveal">
+        <div class="miniTop">
+          <div class="miniTitle">
+            <h3>Operations Command Center</h3>
+            <p>Live performance preview</p>
+          </div>
+          <span class="pill ok">Live</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="statLabel">answer rate</div>
+            <div class="statValue" id="answerRate">92%</div>
+            <div class="statSub">across active queues</div>
+          </div>
+          <div class="stat">
+            <div class="statLabel">avg wait</div>
+            <div class="statValue" id="avgWait">00:37</div>
+            <div class="statSub">reduced from 01:54</div>
+          </div>
+          <div class="stat">
+            <div class="statLabel">conversion</div>
+            <div class="statValue" id="convRate">31%</div>
+            <div class="statSub">qualified inbound</div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-mode="volume">Call Volume</button>
+          <button class="tab" data-mode="quality">QA Score</button>
+          <button class="tab" data-mode="revenue">Revenue</button>
+        </div>
+
+        <div class="chartWrap">
+          <canvas id="heroChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="solutions">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Built for the parts that usually get messy</h2>
+        <p>Short site. Serious message. Everything below maps to real call center pressure points.</p>
+      </div>
+
+      <div class="grid3">
+        <div class="card reveal">
+          <div class="cardNum">01</div>
+          <h3>Routing + response intelligence</h3>
+          <p>Distribute calls faster, prioritize hot leads, and reduce dead time between queue and action.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="cardNum">02</div>
+          <h3>Agent visibility that actually helps</h3>
+          <p>Track talk time, booking rate, wait time, and call quality without turning the floor into spreadsheet soup.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="cardNum">03</div>
+          <h3>QA, reporting, and revenue clarity</h3>
+          <p>See where performance drops, where scripts fail, and which conversations are producing money.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="command">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>Command center preview</h2>
+        <p>Not a brochure. This should feel like the front end of a serious operating system.</p>
+      </div>
+
+      <div class="command">
+        <div class="panel reveal" style="padding:16px;">
+          <div class="miniTop">
+            <div class="miniTitle">
+              <h3>Performance Overview</h3>
+              <p>Modeled operational snapshot</p>
+            </div>
+            <span class="pill">Today</span>
+          </div>
+
+          <div class="chartWrap">
+            <canvas id="opsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="stack reveal">
+          <div class="miniPanel">
+            <div class="miniTop" style="margin-bottom:10px;">
+              <div class="miniTitle">
+                <h3>Live queue feed</h3>
+                <p>Sample events</p>
+              </div>
+            </div>
+
+            <div class="feed">
+              <div class="feedRow">
+                <span>Inbound lead routed to Team A</span>
+                <span class="tag sales">sales</span>
+                <span>12s</span>
+              </div>
+              <div class="feedRow">
+                <span>QA flag raised on call #1831</span>
+                <span class="tag qa">qa</span>
+                <span>2m</span>
+              </div>
+              <div class="feedRow">
+                <span>Support escalation resolved</span>
+                <span class="tag support">support</span>
+                <span>5m</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="miniPanel">
+            <div class="miniTop" style="margin-bottom:10px;">
+              <div class="miniTitle">
+                <h3>Modeled case outcome</h3>
+                <p>Typical impact example</p>
+              </div>
+            </div>
+
+            <div class="proof" style="grid-template-columns:1fr 1fr; gap:10px;">
+              <div class="proofCard">
+                <strong>+18%</strong>
+                <span>booking uplift after faster routing + cleaner follow-up</span>
+              </div>
+              <div class="proofCard">
+                <strong>-41%</strong>
+                <span>queue delay after workflow redesign</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+    <div class="wrap">
+      <div class="sectionHead reveal">
+        <h2>What operators care about</h2>
+        <p>Not vanity. Actual levers.</p>
+      </div>
+
+      <div class="proof">
+        <div class="proofCard reveal">
+          <strong>under 1 min</strong>
+          <span>average wait time target for high-intent inbound flow</span>
+        </div>
+        <div class="proofCard reveal">
+          <strong>10–25%</strong>
+          <span>typical conversion lift from better routing and clearer QA</span>
+        </div>
+        <div class="proofCard reveal">
+          <strong>full visibility</strong>
+          <span>agent performance, queue pressure, and script quality in one layer</span>
+        </div>
+        <div class="proofCard reveal">
+          <strong>less chaos</strong>
+          <span>fewer blind spots, fewer lost leads, fewer “who dropped this?” moments</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="panel ctaBox reveal">
+        <div>
+          <h2>Make the call center feel like a machine, not a mess.</h2>
+          <p>
+            IntelligentSide helps call centers improve routing, reporting, QA visibility, and conversion systems
+            without bloating operations with more manual admin.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" href="mailto:hello@intelligentside.com">Book a Strategy Call</a>
+          <a class="btn" href="#top">Back to Top</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <div>© <span id="year"></span> IntelligentSide</div>
+      <div>Premium systems for call centers</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const revealEls = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting) entry.target.classList.add("show");
+      });
+    }, { threshold: .15 });
+    revealEls.forEach(el=>io.observe(el));
+
+    Chart.defaults.color = "rgba(255,255,255,0.72)";
+    Chart.defaults.borderColor = "rgba(255,255,255,0.08)";
+    Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+    Chart.defaults.plugins.legend.display = false;
+    Chart.defaults.plugins.tooltip.backgroundColor = "rgba(7,10,16,0.94)";
+    Chart.defaults.plugins.tooltip.borderColor = "rgba(255,255,255,0.12)";
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+
+    const heroCtx = document.getElementById("heroChart");
+    let heroChart;
+
+    const heroModes = {
+      volume: {
+        type: "bar",
+        labels: ["8 AM","10 AM","12 PM","2 PM","4 PM","6 PM"],
+        data: [84, 112, 96, 128, 102, 78],
+        label: "Calls"
+      },
+      quality: {
+        type: "line",
+        labels: ["Mon","Tue","Wed","Thu","Fri","Sat"],
+        data: [82, 86, 88, 91, 90, 93],
+        label: "QA Score"
+      },
+      revenue: {
+        type: "line",
+        labels: ["W1","W2","W3","W4"],
+        data: [12400, 15100, 16750, 19300],
+        label: "Revenue"
+      }
+    };
+
+    function buildHeroChart(mode){
+      const d = heroModes[mode];
+      if(heroChart) heroChart.destroy();
+
+      heroChart = new Chart(heroCtx, {
+        type: d.type,
+        data: {
+          labels: d.labels,
+          datasets: [{
+            label: d.label,
+            data: d.data,
+            tension: .35,
+            fill: d.type === "line",
+            backgroundColor: d.type === "line"
+              ? "rgba(111,124,255,0.18)"
+              : "rgba(25,214,194,0.18)",
+            borderColor: d.type === "line"
+              ? "rgba(111,124,255,0.78)"
+              : "rgba(25,214,194,0.76)",
+            borderWidth: 2,
+            pointRadius: d.type === "line" ? 3 : 0,
+            borderRadius: d.type === "bar" ? 10 : 0,
+            borderSkipped: false,
+            barThickness: d.type === "bar" ? 36 : undefined
+          }]
+        },
+        options: {
+          maintainAspectRatio:false,
+          scales: {
+            x: { grid: { display:false }},
+            y: { beginAtZero:true }
+          }
+        }
+      });
+    }
+
+    buildHeroChart("volume");
+
+    document.querySelectorAll(".tab").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+        btn.classList.add("active");
+        buildHeroChart(btn.dataset.mode);
+      });
+    });
+
+    new Chart(document.getElementById("opsChart"), {
+      type: "line",
+      data: {
+        labels: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00"],
+        datasets: [
+          {
+            label: "Handled",
+            data: [34, 51, 46, 63, 58, 72, 66],
+            tension: .35,
+            fill: true,
+            backgroundColor: "rgba(111,124,255,.14)",
+            borderColor: "rgba(111,124,255,.78)",
+            borderWidth: 2,
+            pointRadius: 2
+          },
+          {
+            label: "Converted",
+            data: [10, 16, 14, 22, 20, 25, 23],
+            tension: .35,
+            fill: false,
+            backgroundColor: "rgba(25,214,194,.16)",
+            borderColor: "rgba(25,214,194,.84)",
+            borderWidth: 2,
+            pointRadius: 2
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio:false,
+        plugins:{ legend:{ display:true, labels:{ color:"rgba(255,255,255,.72)" } } },
+        scales:{
+          x:{ grid:{ display:false }},
+          y:{ beginAtZero:true }
+        }
+      }
+    });
+
+    function rand(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    setInterval(()=>{
+      document.getElementById("answerRate").textContent = rand(89, 95) + "%";
+      document.getElementById("convRate").textContent = rand(28, 35) + "%";
+      const sec = rand(28, 49);
+      document.getElementById("avgWait").textContent = "00:" + String(sec).padStart(2,"0");
+    }, 3200);
+  </script>
+</body>
+</html>
