@@ -56,20 +56,10 @@ counters.forEach((counter) => counterObserver.observe(counter));
 
 const form = document.querySelector(".contact-form");
 
-form?.addEventListener("submit", (e) => {
-  e.preventDefault();
-
+form?.addEventListener("submit", () => {
   const button = form.querySelector("button");
-  const originalText = button.textContent;
-
-  button.textContent = "Request Sent";
+  button.textContent = "Sending...";
   button.disabled = true;
-
-  setTimeout(() => {
-    button.textContent = originalText;
-    button.disabled = false;
-    form.reset();
-  }, 1800);
 });
 
 document.addEventListener("mousemove", (e) => {
@@ -82,4 +72,5 @@ document.addEventListener("mousemove", (e) => {
     const moveY = (y - 0.5) * intensity;
     blob.style.transform = `translate(${moveX}px, ${moveY}px)`;
   });
+
 });
